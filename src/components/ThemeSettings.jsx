@@ -66,7 +66,7 @@ const ThemeSettings = () => {
                   <button
                     type="button"
                     className="h-10 w-10 rounded-full cursor-pointer"
-                    style={{ backgrounColor: item.color }}
+                    style={{ backgroundColor: item.color }}
                     onClick={() => setColor(item.color)}
                   >
                     <BsCheck
