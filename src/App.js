@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, HashRouter, Routes, Route } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
@@ -27,15 +27,25 @@ import { useStateContext } from "./contexts/ContextProvider";
 
 const App = () => {
   const {
+    setCurrentColor,
+    setCurrentMode,
+    currentMode,
     activeMenu,
+    currentColor,
     themeSettings,
     setThemeSettings,
-    currentColor,
-    currentMode,
   } = useStateContext();
+  useEffect(() => {
+    const currentThemeColor = localStorage.getItem("colorMode");
+    const currentThemeMode = localStorage.getItem("themeMode");
+    if (currentThemeColor && currentThemeMode) {
+      setCurrentColor(currentThemeColor);
+      setCurrentMode(currentThemeMode);
+    }
+  }, []);
   return (
     <div className={currentMode === "Dark" ? "dark" : ""}>
-      <BrowserRouter>
+      <HashRouter>
         <div className="flex relative dark:bg-main-dark-bg">
           <div className="fixed right-4 bottom-4" style={{ zIndex: "1000" }}>
             <TooltipComponent content="Settings" position="Top">
@@ -70,7 +80,7 @@ const App = () => {
             <div>
               {themeSettings && <ThemeSettings />}
               <Routes>
-                <Route path="/" element={<Ecommerce />} />
+                <Route path="/" exact element={<Ecommerce />} />
                 <Route path="/ecommerce" element={<Ecommerce />} />
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/employees" element={<Employees />} />
@@ -89,9 +99,10 @@ const App = () => {
                 <Route path="/stacked" element={<Stacked />} />
               </Routes>
             </div>
+            <Footer />
           </div>
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 };
